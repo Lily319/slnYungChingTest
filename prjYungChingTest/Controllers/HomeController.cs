@@ -51,7 +51,35 @@ namespace prjYungChingTest.Controllers
             db.SaveChanges();
             return RedirectToAction("Employees", "Home");
         }
-       
+        public IActionResult Edit(int? id)
+        {
+            var e = db.Employees.FirstOrDefault(e => e.EmployeeId == id);
+            return View(e);
+        }
+        [HttpPost]
+        public IActionResult Edit(Employee employee)
+        {
+            var e = db.Employees.FirstOrDefault(e => e.EmployeeId == employee.EmployeeId);
+            e.LastName = employee.LastName;
+            e.FirstName = employee.FirstName;
+            e.Title = employee.Title;
+            e.TitleOfCourtesy = employee.TitleOfCourtesy;
+            e.BirthDate = employee.BirthDate;
+            e.HireDate = employee.HireDate;
+            e.Address = employee.Address;
+            e.City = employee.City;
+            e.Region = employee.Region;
+            e.PostalCode = employee.PostalCode;
+            e.Country = employee.Country;
+            e.HomePhone = employee.HomePhone;
+            e.Extension = employee.Extension;
+            e.Notes = employee.Notes;
+            e.ReportsTo = employee.ReportsTo;
+            db.SaveChanges();
+            return RedirectToAction("Edit", "Home", employee.EmployeeId);
+        }
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
