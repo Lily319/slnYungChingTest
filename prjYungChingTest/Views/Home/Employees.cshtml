@@ -1,0 +1,82 @@
+﻿@model IEnumerable<prjYungChingTest.Models.Employee>
+
+@{
+    ViewData["Title"] = "Employees";
+}
+
+<h2>員工列表</h2>
+
+<p>
+    <label>姓名關鍵字:</label>
+    <input type="text" />
+    <button>查詢</button>
+    <a asp-action="Create" style="float:right">新增員工資訊</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                姓名
+            </th>
+            <th>
+                職稱
+            </th>
+            <th>
+                年齡
+            </th>
+            <th>
+                到職日期
+            </th>
+            <th>
+                分機
+            </th>
+            <th>
+                主管
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            string name = item.LastName + " " + item.FirstName;
+            DateTime bday = (DateTime)item.BirthDate;
+            bool isExpired = bday < DateTime.Today.AddYears(-(DateTime.Today.Year - bday.Year));
+            int age;
+            if (isExpired)
+            {
+                age = DateTime.Today.Year - bday.Year;
+            }
+            else
+            {
+                age = DateTime.Today.Year - bday.Year - 1;
+            }
+            string hiredate = item.HireDate.Value.Year + "/" + item.HireDate.Value.Month + "/" + item.HireDate.Value.Day;
+
+            <tr>
+                <td>
+                    @name
+                </td>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @age
+                </td>
+                <td>
+                    @hiredate
+                </td>
+                <td>
+                    @item.Extension
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReportsToNavigation.FirstName)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.EmployeeId">查看細節</a> |
+                    <a asp-action="Delete" asp-route-id="@item.EmployeeId">刪除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
