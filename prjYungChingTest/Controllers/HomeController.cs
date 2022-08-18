@@ -78,7 +78,20 @@ namespace prjYungChingTest.Controllers
             db.SaveChanges();
             return RedirectToAction("Edit", "Home", employee.EmployeeId);
         }
-
+        public IActionResult Delete(int? id)
+        {
+            try
+            {
+                var e = db.Employees.FirstOrDefault(e => e.EmployeeId == id);
+                db.Remove(e);
+                db.SaveChanges();
+                return RedirectToAction("Employees", "Home");
+            }
+            catch
+            {
+                return RedirectToAction("Employees", "Home");
+            }
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

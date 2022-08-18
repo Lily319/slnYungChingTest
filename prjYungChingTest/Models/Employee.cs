@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -13,7 +14,9 @@ namespace prjYungChingTest.Models
         }
 
         public int EmployeeId { get; set; }
+        [Required]
         public string LastName { get; set; }
+        [Required]
         public string FirstName { get; set; }
         public string Title { get; set; }
         public string TitleOfCourtesy { get; set; }
