@@ -51,6 +51,7 @@ namespace prjYungChingTest.Controllers
             db.SaveChanges();
             return RedirectToAction("Employees", "Home");
         }
+       
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
