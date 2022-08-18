@@ -5,13 +5,14 @@
 }
 
 <h2>員工列表</h2>
-
-<p>
-    <label>姓名關鍵字:</label>
-    <input type="text" />
-    <button>查詢</button>
-    <a asp-action="Create" style="float:right">新增員工資訊</a>
-</p>
+<form asp-action="Employees">
+    <p>
+        <label>姓名關鍵字:</label>
+        <input type="text" name="keyword" />
+        <input type="submit" value="查詢" class="btn-info" />
+        <a asp-action="Create" style="float:right">新增員工資料</a>
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -37,22 +38,27 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            string name = item.LastName + " " + item.FirstName;
-            DateTime bday = (DateTime)item.BirthDate;
-            bool isExpired = bday < DateTime.Today.AddYears(-(DateTime.Today.Year - bday.Year));
-            int age;
-            if (isExpired)
+        @{ 
+            foreach (var item in Model)
             {
-                age = DateTime.Today.Year - bday.Year;
-            }
-            else
-            {
-                age = DateTime.Today.Year - bday.Year - 1;
-            }
-            string hiredate = item.HireDate.Value.Year + "/" + item.HireDate.Value.Month + "/" + item.HireDate.Value.Day;
-
+                string name = item.LastName + " " + item.FirstName;
+                int age = 0;
+                if (item.BirthDate != null) {
+                    DateTime bday = (DateTime)item.BirthDate;
+                    bool isExpired = bday < DateTime.Today.AddYears(-(DateTime.Today.Year - bday.Year));
+                    if (isExpired)
+                    {
+                        age = DateTime.Today.Year - bday.Year;
+                    }
+                    else
+                    {
+                        age = DateTime.Today.Year - bday.Year - 1;
+                    }
+                }
+                string hiredate = "無紀錄";
+                if (item.HireDate != null) {
+                    hiredate = item.HireDate.Value.Year + "/" + item.HireDate.Value.Month + "/" + item.HireDate.Value.Day;
+                }
             <tr>
                 <td>
                     @name
@@ -73,10 +79,11 @@
                     @Html.DisplayFor(modelItem => item.ReportsToNavigation.FirstName)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.EmployeeId">查看細節</a> |
-                    <a asp-action="Delete" asp-route-id="@item.EmployeeId">刪除</a>
+                    <a asp-action="Edit" asp-route-id="@item.EmployeeId">查看細節</a> |
+                    <a asp-action="Delete" asp-route-id="@item.EmployeeId" onclick="return confirm('確定要刪除嗎?(若已有其他相關資料,將無法刪除)');">刪除</a>
                 </td>
             </tr>
-        }
+                }
+            }
     </tbody>
 </table>

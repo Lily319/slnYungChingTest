@@ -25,8 +25,32 @@ namespace prjYungChingTest.Controllers
             var e = db.Employees;
             return View(e);
         }
+        [HttpPost]
+        public IActionResult Employees(string keyword)
+        {
+            if (String.IsNullOrEmpty(keyword))
+            {
+                var e = db.Employees;
+                return View(e);
+            }
+            else
+            {
+                var e = db.Employees.Where(e => e.FirstName.Contains(keyword) || e.LastName.Contains(keyword));
+                return View(e);
+            }
+        }
 
-
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Employee employee)
+        {
+            db.Employees.Add(employee);
+            db.SaveChanges();
+            return RedirectToAction("Employees", "Home");
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
